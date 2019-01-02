@@ -54,3 +54,47 @@ Spring Cloud Contract OpenAPI converts your OpenAPI definitions to [Spring Cloud
         </plugins>
     </build>
 ```
+
+### Quick Example
+
+#### OpenAPI document
+
+Place your OpenAPI document under the `src/test/resources/contracts` folder.
+
+```yaml
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Example
+  license:
+    name: MIT
+paths:
+  /example:
+    get:
+      responses:
+        '200':
+          description: OK
+```
+
+#### Generate tests
+
+Run `mvn spring-cloud-contract:generateTests` and then you can see the auto-generated test codes below:
+
+```java
+public class ContractVerifierTest extends ContractVerifierBase {
+
+	@Test
+	public void validate_openapi() throws Exception {
+		// given:
+			MockMvcRequestSpecification request = given();
+
+		// when:
+			ResponseOptions response = given().spec(request)
+					.get("/example");
+
+		// then:
+			assertThat(response.statusCode()).isEqualTo(200);
+	}
+
+}
+```
