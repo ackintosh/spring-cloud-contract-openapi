@@ -6,6 +6,7 @@ import io.swagger.v3.parser.core.models.ParseOptions
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.cloud.contract.spec.ContractConverter
 import java.io.File
+import java.lang.RuntimeException
 
 class OpenAPIContractConverter : ContractConverter<Collection<PathItem>> {
     override fun isAccepted(file: File?): Boolean {
@@ -17,6 +18,11 @@ class OpenAPIContractConverter : ContractConverter<Collection<PathItem>> {
 
         if (parseResult.openAPI == null) {
             return false
+        }
+
+        val errorMessages = parseResult.messages
+        if (errorMessages.size > 0) {
+            throw RuntimeException("The spec ${file.path} has error(s): $errorMessages")
         }
 
         return parseResult.openAPI.paths.size > 0
