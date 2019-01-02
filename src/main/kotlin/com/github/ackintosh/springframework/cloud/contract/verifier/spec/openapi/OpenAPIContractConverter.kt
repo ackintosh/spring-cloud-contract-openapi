@@ -2,6 +2,7 @@ package com.github.ackintosh.springframework.cloud.contract.verifier.spec.openap
 
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.parser.OpenAPIV3Parser
+import io.swagger.v3.parser.core.models.ParseOptions
 import org.springframework.cloud.contract.spec.Contract
 import org.springframework.cloud.contract.spec.ContractConverter
 import java.io.File
@@ -12,13 +13,13 @@ class OpenAPIContractConverter : ContractConverter<Collection<PathItem>> {
             return false
         }
 
-        val spec = OpenAPIV3Parser().read(file.path)
+        val parseResult = OpenAPIV3Parser().readLocation(file.path, null, ParseOptions())
 
-        if (spec == null) {
+        if (parseResult.openAPI == null) {
             return false
         }
 
-        return spec.paths.size > 0
+        return parseResult.openAPI.paths.size > 0
     }
 
     override fun convertFrom(file: File?): MutableCollection<Contract> {
