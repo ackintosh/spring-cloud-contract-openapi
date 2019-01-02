@@ -42,7 +42,7 @@ class OpenAPIContractConverter : ContractConverter<Collection<PathItem>> {
                                 it.value.responses != null && it.value.responses.size > 0
                             }
                             .map {
-                                val c = Contract.make(object: Closure<Unit>(null) {
+                                val c = Contract.make(object : Closure<Unit>(null) {
                                     fun doCall() {}
                                 })
                                 c.name(it.value.operationId)
