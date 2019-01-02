@@ -1,0 +1,2 @@
+org.springframework.cloud.contract.spec.ContractConverter=\
+com.github.ackintosh.springframework.cloud.contract.verifier.spec.openapi.OpenAPIContractConverter
