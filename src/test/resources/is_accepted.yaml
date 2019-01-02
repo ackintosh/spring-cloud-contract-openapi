@@ -1,0 +1,12 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Example
+  license:
+    name: MIT
+paths:
+  /is_accepted:
+    get:
+      responses:
+        '200':
+          description: OK
