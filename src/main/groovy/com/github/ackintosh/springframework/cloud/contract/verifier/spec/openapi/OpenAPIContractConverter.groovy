@@ -39,7 +39,7 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
         return parseResult.openAPI.getPaths().collect({
             String path = it.key
             it.value.readOperationsMap().findAll {
-                it.value.responses != null && it.value.responses.size() > 0
+                it.value.responses != null && it.value.responses.size() > 0 && takeResponse(it.value) != null
             }.each {
                 processOperations(path, it)
             }
@@ -52,11 +52,7 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
     }
 
     private static Collection<Contract> processOperations(String path, Map.Entry<HttpMethod, Operation> operations) {
-        return operations.findAll {
-            takeResponse(it.value) != null
-        }.collect {
-            processOperation(path, it.key, it.value)
-        }
+        return operations.collect { processOperation(path, it.key, it.value) }
     }
 
     private static Map.Entry<String, ApiResponse> takeResponse(Operation operation) {
