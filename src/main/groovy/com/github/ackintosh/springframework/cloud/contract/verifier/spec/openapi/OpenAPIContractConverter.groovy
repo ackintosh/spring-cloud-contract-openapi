@@ -1,6 +1,10 @@
 package com.github.ackintosh.springframework.cloud.contract.verifier.spec.openapi
 
+import io.swagger.v3.oas.models.Operation
 import io.swagger.v3.oas.models.PathItem
+import io.swagger.v3.oas.models.PathItem.HttpMethod
+import io.swagger.v3.oas.models.media.MediaType
+import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.parser.OpenAPIV3Parser
 import io.swagger.v3.parser.core.models.ParseOptions
 import io.swagger.v3.parser.core.models.SwaggerParseResult
@@ -33,13 +37,11 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
         SwaggerParseResult parseResult = (new OpenAPIV3Parser()).readLocation(file.path, null, new ParseOptions())
 
         return parseResult.openAPI.getPaths().collect({
+            String path = it.key
             it.value.readOperationsMap().findAll {
                 it.value.responses != null && it.value.responses.size() > 0
             }.each {
-                // TODO
-                Contract.make {
-
-                }
+                processOperations(path, it)
             }
         }).flatten()
     }
@@ -47,5 +49,36 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
     @Override
     Collection<PathItem> convertTo(Collection collection) {
         throw new IllegalStateException("`convertTo` isn't supported.")
+    }
+
+    private static Collection<Contract> processOperations(String path, Map.Entry<HttpMethod, Operation> operations) {
+        return operations.findAll {
+            takeResponse(it.value) != null
+        }.collect {
+            processOperation(path, it.key, it.value)
+        }
+    }
+
+    private static Map.Entry<String, ApiResponse> takeResponse(Operation operation) {
+        return operation.responses.find { it.key == "200" }
+    }
+
+    private static Contract processOperation(String path, HttpMethod httpMethod, Operation operation) {
+        Map.Entry<String, ApiResponse> responseSpec = takeResponse(operation)
+        Map.Entry<String, MediaType> content = responseSpec.content.entrySet().iterator().next()
+
+        Contract.make {
+            description(operation.description)
+            request {
+                method httpMethod.toString()
+                url path
+            }
+            response {
+                status responseSpec.key.toInteger()
+                headers {
+                    contentType(content.key)
+                }
+            }
+        }
     }
 }
