@@ -41,7 +41,7 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
             it.value.readOperationsMap().findAll {
                 it.value.responses != null && it.value.responses.size() > 0 && takeResponse(it.value) != null
             }.each {
-                processOperations(path, it)
+                processOperation(path, it.key, it.value)
             }
         }).flatten()
     }
@@ -49,10 +49,6 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
     @Override
     Collection<PathItem> convertTo(Collection collection) {
         throw new IllegalStateException("`convertTo` isn't supported.")
-    }
-
-    private static Collection<Contract> processOperations(String path, Map.Entry<HttpMethod, Operation> operations) {
-        return operations.collect { processOperation(path, it.key, it.value) }
     }
 
     private static Map.Entry<String, ApiResponse> takeResponse(Operation operation) {
