@@ -1,0 +1,17 @@
+openapi: 3.0.2
+info:
+  version: 1.0.0
+  title: Example
+  license:
+    name: MIT
+paths:
+  /convert_from:
+    get:
+      description: GET operation for `/convert_from`
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
