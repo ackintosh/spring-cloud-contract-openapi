@@ -15,7 +15,7 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
     @Override
     boolean isAccepted(File file) {
         if (file == null) {
-            return false;
+            return false
         }
 
         SwaggerParseResult parseResult = (new OpenAPIV3Parser()).readLocation(
@@ -40,7 +40,7 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
             String path = it.key
             it.value.readOperationsMap().findAll {
                 it.value.responses != null && it.value.responses.size() > 0 && takeResponse(it.value) != null
-            }.each {
+            }.collect {
                 processOperation(path, it.key, it.value)
             }
         }).flatten()
@@ -57,7 +57,7 @@ class OpenAPIContractConverter implements ContractConverter<Collection<PathItem>
 
     private static Contract processOperation(String path, HttpMethod httpMethod, Operation operation) {
         Map.Entry<String, ApiResponse> responseSpec = takeResponse(operation)
-        Map.Entry<String, MediaType> content = responseSpec.content.entrySet().iterator().next()
+        Map.Entry<String, MediaType> content = responseSpec.value.content.entrySet().iterator().next()
 
         Contract.make {
             description(operation.description)
