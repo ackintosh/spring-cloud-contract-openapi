@@ -8,4 +8,14 @@ class OpenAPIContractConverterTest {
     void isAccepted() {
         assertTrue((new OpenAPIContractConverter()).isAccepted(new File("src/test/resources/is_accepted.yaml")))
     }
+
+    @Test
+    void isAcceptedReturnsFalseWhenTheParameterIsNull() {
+        assertFalse((new OpenAPIContractConverter().isAccepted(null)))
+    }
+
+    @Test(expected = RuntimeException)
+    void isAcceptedThrowsException() {
+        (new OpenAPIContractConverter()).isAccepted(new File("src/test/resources/is_accepted_invalid.yaml"))
+    }
 }
