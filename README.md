@@ -2,7 +2,7 @@
 
 :information_source: This project is under heavy development :information_source:
 
-Spring Cloud Contract OpenAPI converts your OpenAPI definitions to [Spring Cloud Contract](https://github.com/spring-cloud/spring-cloud-contract) definitions. No need to add more definitions to your OpenAPI document for conversion. :relieved:
+OpenAPI support for [Spring Cloud Contract](https://github.com/spring-cloud/spring-cloud-contract), which converts from OpenAPI spec to Contract internally and generate test codes based on the spec. No need to add more definitions to your OpenAPI spec for the conversion. :relieved:
 
 ## Usage
 
