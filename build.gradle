@@ -3,8 +3,7 @@
  */
 
 plugins {
-    id 'java'
-    id 'maven-publish'
+    id 'groovy'
 }
 
 repositories {
@@ -22,12 +21,4 @@ dependencies {
 
 group = 'com.github.ackintosh'
 version = '1.0.0'
-sourceCompatibility = '1.8'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
+sourceCompatibility = JavaVersion.VERSION_11
