@@ -6,6 +6,11 @@ OpenAPI support for [Spring Cloud Contract](https://github.com/spring-cloud/spri
 
 ## Usage
 
+### Gradle
+
+A sample project using Gradle is available in the repo:
+https://github.com/ackintosh/spring-cloud-contract-openapi-sample
+
 ### Maven
 
 ```xml
@@ -23,12 +28,14 @@ OpenAPI support for [Spring Cloud Contract](https://github.com/spring-cloud/spri
                     <dependency>
                         <groupId>com.github.ackintosh</groupId>
                         <artifactId>spring-cloud-contract-openapi</artifactId>
-                        <version>1.0.0</version>
+                        <version>0.0.1-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>
 
-            <!-- Install a jar file built in your machine locally for now -->
+            <!-- Spring Cloud Contract OpenAPI is published on Github Packages but GitHub Packages does not support SNAPSHOT versions of Apache Maven. -->
+            <!-- https://help.github.com/en/github/managing-packages-with-github-packages/configuring-apache-maven-for-use-with-github-packages -->
+            <!-- For the above reason we need to install a jar file built by local machine for now. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
@@ -41,7 +48,7 @@ OpenAPI support for [Spring Cloud Contract](https://github.com/spring-cloud/spri
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>com.github.ackintosh</groupId>
                             <artifactId>spring-cloud-contract-openapi</artifactId>
-                            <version>1.0.0</version>
+                            <version>0.0.1-SNAPSHOT</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -55,9 +62,9 @@ OpenAPI support for [Spring Cloud Contract](https://github.com/spring-cloud/spri
     </build>
 ```
 
-### Quick Example
+## Quick Example
 
-#### OpenAPI document
+### OpenAPI document
 
 Place your OpenAPI document under the `src/test/resources/contracts` folder.
 
@@ -74,9 +81,13 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: string
 ```
 
-#### Generate tests
+### Generate tests
 
 Run `mvn spring-cloud-contract:generateTests` and then you can see the auto-generated test codes below:
 
@@ -98,3 +109,9 @@ public class ContractVerifierTest extends ContractVerifierBase {
 
 }
 ```
+
+## Authors
+
+* **Akihito Nakano** - *founding author* - [@ackintosh](https://github.com/ackintosh)
+
+See also the list of [contributors](https://github.com/ackintosh/spring-cloud-contract-openapi/graphs/contributors) who participated in this project.
