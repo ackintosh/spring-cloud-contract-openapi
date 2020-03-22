@@ -1,6 +1,14 @@
 name: CI
 
-on: [push]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      # Bors : strict mode for your CI/CD
+      # https://bors.tech/documentation/getting-started/
+      - staging # This is where pull requests from "bors r+" are built.
+      - trying # This is where pull requests from "bors try" are built.
 
 jobs:
   test:
